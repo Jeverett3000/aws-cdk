@@ -6,8 +6,8 @@ import logging
 def handler(event, context):
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    command = f"/opt/awscli/aws emr-containers update-role-trust-policy --cluster-name {event['ResourceProperties']['eksClusterId']} --namespace {event['ResourceProperties']['eksNamespace']} --role-name {event['ResourceProperties']['roleName']}"
-    if event['RequestType'] == 'Create' or event['RequestType'] == 'Update' :
+    if event['RequestType'] in ['Create', 'Update']:
+        command = f"/opt/awscli/aws emr-containers update-role-trust-policy --cluster-name {event['ResourceProperties']['eksClusterId']} --namespace {event['ResourceProperties']['eksNamespace']} --role-name {event['ResourceProperties']['roleName']}"
         try:
             res = sp.check_output(command, shell=True)
             logger.info(f"Successfully ran {command}")
